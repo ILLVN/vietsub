@@ -5,7 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ILLIT Vietsub | ILLVN Subteam</title>
-    <meta name="description" content="Xem video ILLIT với phụ đề tiếng Việt, được cập nhật liên tục bởi ILLVN Subteam." />
+    <meta name="description"
+        content="Xem video ILLIT với phụ đề tiếng Việt, được cập nhật liên tục bởi ILLVN Subteam." />
     <link rel="icon" href="favicon.ico" />
 
     <style>
@@ -177,7 +178,7 @@
             position: absolute;
             left: 5%;
             right: 5%;
-            bottom: 10%;
+            bottom: 30px;
             text-align: center;
             z-index: 20;
             pointer-events: none;
@@ -372,6 +373,7 @@
         }
     </style>
 </head>
+
 <body>
     <div id="sidebar">
         <div class="sidebar-header">
@@ -637,14 +639,25 @@
         document
             .getElementById("custom-fs-btn")
             .onclick = async () => {
-                const box =
-                    document.getElementById("full-player");
+                const box = document.getElementById("full-player");
                 if (!document.fullscreenElement) {
                     await box.requestFullscreen();
+                    if (screen.orientation &&
+                        screen.orientation.lock) {
+                        try {
+                            await screen.orientation.lock("landscape");
+                        } catch (e) { }
+                    }
                 } else {
+                    if (screen.orientation &&
+                        screen.orientation.unlock) {
+
+                        screen.orientation.unlock();
+                    }
                     await document.exitFullscreen();
                 }
             };
     </script>
 </body>
+
 </html>
