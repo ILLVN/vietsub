@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ILLIT Vietsub | ILLVN Subteam</title>
     <meta name="description" content="Xem video ILLIT với phụ đề tiếng Việt, được cập nhật liên tục bởi ILLVN Subteam." />
     <link rel="icon" href="favicon.ico" />
+
     <style>
         :root {
             --primary: #ff2d55;
@@ -16,22 +18,28 @@
             --text: #ffffff;
             --muted: #aaaaaa;
         }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        html, body {
+
+        html,
+        body {
             width: 100%;
             height: 100%;
             overflow: hidden;
             background: var(--bg);
             color: var(--text);
-            font-family: Inter, system-ui, sans-serif;
+            font-family: "Roboto", sans-serif;
+            font-weight: 500;
         }
+
         body {
             display: flex;
         }
+
         #sidebar {
             width: 360px;
             background: var(--sidebar);
@@ -40,16 +48,19 @@
             flex-direction: column;
             overflow: hidden;
         }
+
         .sidebar-header {
             padding: 18px;
             border-bottom: 1px solid var(--border);
             flex-shrink: 0;
         }
+
         .app-title {
             font-size: 22px;
             font-weight: 700;
             margin-bottom: 14px;
         }
+
         .search-box input {
             width: 100%;
             height: 44px;
@@ -61,21 +72,26 @@
             color: white;
             font-size: 14px;
         }
+
         .search-box input:focus {
             border-color: var(--primary);
         }
+
         #video-list {
             flex: 1;
             overflow-y: auto;
             padding: 14px;
         }
+
         #video-list::-webkit-scrollbar {
             width: 7px;
         }
+
         #video-list::-webkit-scrollbar-thumb {
             background: #333;
             border-radius: 999px;
         }
+
         .category-title {
             font-size: 13px;
             font-weight: 700;
@@ -84,6 +100,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
+
         .video-item {
             display: flex;
             gap: 12px;
@@ -93,27 +110,32 @@
             overflow: hidden;
             cursor: pointer;
             margin-bottom: 12px;
-            transition: 0.2s;
+            transition: .2s;
         }
+
         .video-item:hover {
             border-color: var(--primary);
             transform: translateY(-1px);
         }
+
         .video-item.active {
             border-color: var(--primary);
-            background: rgba(255, 45, 85, 0.12);
+            background: rgba(255, 45, 85, .12);
         }
+
         .video-thumb {
             width: 130px;
             height: 74px;
             object-fit: cover;
             flex-shrink: 0;
         }
+
         .video-content {
             padding: 10px 10px 10px 0;
             display: flex;
             align-items: center;
         }
+
         .video-title {
             font-size: 13px;
             line-height: 1.45;
@@ -123,6 +145,7 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+
         #main-content {
             flex: 1;
             display: flex;
@@ -132,6 +155,7 @@
             padding: 20px;
             overflow: hidden;
         }
+
         .player-box {
             width: 100%;
             max-width: 1200px;
@@ -140,32 +164,28 @@
             background: black;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 20px 70px rgba(0, 0, 0, .7);
         }
+
         iframe {
             width: 100%;
             height: 100%;
             border: none;
-            pointer-events: none;
         }
-        #click-layer {
-            position: absolute;
-            inset: 0;
-            z-index: 5;
-            cursor: pointer;
-        }
+
         #sub-container {
             position: absolute;
             left: 5%;
             right: 5%;
-            bottom: 14%;
+            bottom: 10%;
             text-align: center;
             z-index: 20;
             pointer-events: none;
-            transition: 0.3s;
+            transition: .3s;
         }
+
         #sub-text {
-            background: rgba(0, 0, 0, 0.82);
+            background: rgba(0, 0, 0, .82);
             color: white;
             font-size: clamp(17px, 2.5vw, 32px);
             line-height: 1.5;
@@ -176,45 +196,44 @@
             white-space: pre-wrap;
             max-width: 90%;
         }
-        .controls {
+
+        #custom-fs-btn {
             position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 14px;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.88));
-            z-index: 30;
-            transition: opacity .3s, transform .3s;
-        }
-        .hide-controls {
-            opacity: 0;
-            transform: translateY(10px);
-            pointer-events: none;
-        }
-        .btn {
-            background: none;
+            right: 16px;
+            bottom: 16px;
+            z-index: 40;
+            width: 46px;
+            height: 46px;
             border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-        .progress {
-            flex: 1;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.2);
             border-radius: 999px;
-            overflow: hidden;
+            background: rgba(0, 0, 0, .72);
+            color: white;
+            font-size: 22px;
             cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: .2s;
         }
-        #progress-bar {
-            width: 0%;
-            height: 100%;
-            background: var(--primary);
+
+        #custom-fs-btn:hover {
+            background: rgba(0, 0, 0, .9);
+            transform: scale(1.05);
         }
+
+        .player-box:fullscreen {
+            width: 100vw;
+            height: 100vh;
+            max-width: none;
+            aspect-ratio: auto;
+            border-radius: 0;
+        }
+
+        .player-box:-webkit-full-screen {
+            width: 100vw;
+            height: 100vh;
+            max-width: none;
+            border-radius: 0;
+        }
+
         #now-playing {
             margin-top: 18px;
             color: #bbb;
@@ -223,6 +242,7 @@
             max-width: 900px;
             display: none;
         }
+
         #empty-state {
             display: flex;
             flex-direction: column;
@@ -233,61 +253,131 @@
             margin-top: 24px;
             color: #aaa;
         }
+
         .empty-icon {
             width: 90px;
             height: 90px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, .06);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 40px;
             margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, .08);
         }
+
         .empty-title {
             font-size: 24px;
             font-weight: 700;
             color: white;
             margin-bottom: 10px;
         }
+
         .empty-desc {
             font-size: 15px;
             color: #999;
             max-width: 420px;
             line-height: 1.6;
         }
-        @media(max-width: 900px) {
-            body { flex-direction: column; }
-            #sidebar { width: 100%; height: 48vh; border-right: none; border-bottom: 1px solid var(--border); }
-            #main-content { padding: 12px; justify-content: flex-start; }
-            .player-box { border-radius: 14px; }
-            .video-thumb { width: 120px; height: 68px; }
-            .video-title { font-size: 12px; }
-            #sub-container { bottom: 18%; }
-            #sub-text { font-size: clamp(15px, 4vw, 22px); padding: 6px 10px; }
-            .controls { padding: 12px; }
-            .btn { font-size: 22px; }
+
+        @media(max-width:900px) {
+            body {
+                flex-direction: column;
+            }
+
+            #sidebar {
+                width: 100%;
+                height: 48vh;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            #main-content {
+                padding: 12px;
+                justify-content: flex-start;
+            }
+
+            .player-box {
+                border-radius: 14px;
+            }
+
+            .video-thumb {
+                width: 120px;
+                height: 68px;
+            }
+
+            .video-title {
+                font-size: 12px;
+            }
+
+            #sub-container {
+                bottom: 85px;
+            }
+
+            #sub-text {
+                font-size: clamp(15px, 4vw, 22px);
+                padding: 6px 10px;
+            }
         }
-        @media(max-width: 600px) {
-            #sidebar { height: 52vh; }
-            .video-item { gap: 10px; }
-            .video-thumb { width: 110px; height: 62px; }
-            .video-title { -webkit-line-clamp: 2; }
-            .player-box { border-radius: 10px; }
-            #sub-container { bottom: 20%; }
-            #sub-text { font-size: 15px; line-height: 1.4; }
-            #empty-state { padding: 28px 12px; }
-            .empty-icon { width: 72px; height: 72px; font-size: 32px; }
-            .empty-title { font-size: 20px; }
-            .empty-desc { font-size: 14px; }
+
+        @media(max-width:600px) {
+            #sidebar {
+                height: 52vh;
+            }
+
+            .video-item {
+                gap: 10px;
+            }
+
+            .video-thumb {
+                width: 110px;
+                height: 62px;
+            }
+
+            .video-title {
+                -webkit-line-clamp: 2;
+            }
+
+            .player-box {
+                border-radius: 10px;
+            }
+
+            #sub-container {
+                bottom: 85px;
+            }
+
+            #sub-text {
+                font-size: 15px;
+                line-height: 1.4;
+            }
+
+            #empty-state {
+                padding: 28px 12px;
+            }
+
+            .empty-icon {
+                width: 72px;
+                height: 72px;
+                font-size: 32px;
+            }
+
+            .empty-title {
+                font-size: 20px;
+            }
+
+            .empty-desc {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
     <div id="sidebar">
         <div class="sidebar-header">
-            <div class="app-title">ILLIT Vietsub</div>
+            <div class="app-title">
+                ILLIT Vietsub
+            </div>
             <div class="search-box">
                 <input type="text" id="search-input" placeholder="Tìm video..." />
             </div>
@@ -296,29 +386,35 @@
     </div>
     <div id="main-content">
         <div id="empty-state">
-            <div class="empty-icon">▶</div>
-            <div class="empty-title">Chưa phát video nào</div>
-            <div class="empty-desc">Chọn một video từ playlist để bắt đầu xem ◖|˶˘꒳˘˶|◗♪ᴵᵀˢ ᴹᴱ</div>
+            <div class="empty-icon">
+                ▶
+            </div>
+            <div class="empty-title">
+                Chưa phát video nào
+            </div>
+            <div class="empty-desc">
+                Chọn một video từ playlist để bắt đầu xem ◖|˶˘꒳˘˶|◗♪ᴵᵀˢ ᴹᴱ
+            </div>
         </div>
         <div class="player-box" id="full-player" style="display:none;">
             <div id="yt-frame"></div>
-            <div id="click-layer"></div>
             <div id="sub-container">
                 <span id="sub-text"></span>
             </div>
-            <div class="controls" id="ctrl-bar">
-                <button class="btn" id="play-btn">▶</button>
-                <div class="progress" id="progress-container">
-                    <div id="progress-bar"></div>
-                </div>
-                <button class="btn" id="fs-btn">⛶</button>
-            </div>
+            <button id="custom-fs-btn">
+                ⛶
+            </button>
         </div>
         <div id="now-playing"></div>
     </div>
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        let player, captions = [], isPlaying = false, animFrame, hideTimeout, allData = [];
+        let player;
+        let captions = [];
+        let isPlaying = false;
+        let animFrame;
+        let allData = [];
+
         async function loadJson() {
             try {
                 const response = await fetch("videos.json");
@@ -328,132 +424,227 @@
                 console.error("Không load được videos.json");
             }
         }
+
         function renderVideos(data) {
-            const list = document.getElementById("video-list");
+            const list =
+                document.getElementById("video-list");
             list.innerHTML = "";
             data.forEach(group => {
-                const category = document.createElement("div");
-                category.className = "category-title";
-                category.innerText = group.category;
+                const category =
+                    document.createElement("div");
+                category.className =
+                    "category-title";
+                category.innerText =
+                    group.category;
                 list.appendChild(category);
                 group.videos.forEach(video => {
-                    const item = document.createElement("div");
-                    item.className = "video-item";
+                    const item =
+                        document.createElement("div");
+                    item.className =
+                        "video-item";
                     item.innerHTML = `
                         <img class="video-thumb" src="${video.thumb}" alt="">
                         <div class="video-content">
                             <div class="video-title">${video.title}</div>
-                        </div>`;
-                    item.onclick = () => loadVideo(video, item);
+                        </div>
+                    `;
+                    item.onclick =
+                        () => loadVideo(video, item);
                     list.appendChild(item);
                 });
             });
         }
-        document.getElementById("search-input").addEventListener("input", function () {
-            const keyword = this.value.trim().toLowerCase();
-            if (!keyword) { renderVideos(allData); return; }
-            const filtered = allData.map(group => ({
-                category: group.category,
-                videos: group.videos.filter(v => v.title.toLowerCase().includes(keyword))
-            })).filter(group => group.videos.length);
-            renderVideos(filtered);
-        });
-        function onYouTubeIframeAPIReady() { loadJson(); }
-        function loadVideo(video, el) {
-            document.querySelectorAll(".video-item").forEach(v => v.classList.remove("active"));
-            el.classList.add("active");
-            document.getElementById("empty-state").style.display = "none";
-            document.getElementById("full-player").style.display = "block";
-            document.getElementById("now-playing").style.display = "block";
-            document.getElementById("now-playing").innerText = video.title;
-            if (!player) {
-                player = new YT.Player("yt-frame", {
-                    height: "100%", width: "100%", videoId: video.id,
-                    playerVars: { controls: 0, disablekb: 1, rel: 0, modestbranding: 1 },
-                    events: { onStateChange: onPlayerStateChange }
-                });
-            } else { player.loadVideoById(video.id); }
-            fetch(video.sub).then(r => r.text()).then(text => { captions = parseVTT(text); })
-            .catch(() => { captions = []; });
+
+        document
+            .getElementById("search-input")
+            .addEventListener("input", function () {
+                const keyword =
+                    this.value
+                        .trim()
+                        .toLowerCase();
+                if (!keyword) {
+                    renderVideos(allData);
+                    return;
+                }
+                const filtered =
+                    allData
+                        .map(group => ({
+                            category: group.category,
+                            videos:
+                                group.videos.filter(v =>
+                                    v.title
+                                        .toLowerCase()
+                                        .includes(keyword)
+                                )
+                        }))
+                        .filter(group =>
+                            group.videos.length
+                        );
+                renderVideos(filtered);
+            });
+
+        function onYouTubeIframeAPIReady() {
+            loadJson();
         }
+
+        function loadVideo(video, el) {
+            document
+                .querySelectorAll(".video-item")
+                .forEach(v =>
+                    v.classList.remove("active")
+                );
+            el.classList.add("active");
+            document
+                .getElementById("empty-state")
+                .style.display = "none";
+            document
+                .getElementById("full-player")
+                .style.display = "block";
+            document
+                .getElementById("now-playing")
+                .style.display = "block";
+            document
+                .getElementById("now-playing")
+                .innerText = video.title;
+
+            if (!player) {
+                player = new YT.Player(
+                    "yt-frame",
+                    {
+                        height: "100%",
+                        width: "100%",
+                        videoId: video.id,
+
+                        playerVars: {
+                            controls: 1,
+                            disablekb: 0,
+                            rel: 0,
+                            modestbranding: 1,
+                            fs: 0
+                        },
+
+                        events: {
+                            onStateChange:
+                                onPlayerStateChange
+                        }
+                    }
+                );
+
+            } else {
+                player.loadVideoById(video.id);
+            }
+
+            fetch(video.sub)
+                .then(r => r.text())
+                .then(text => {
+                    captions =
+                        parseVTT(text);
+                })
+                .catch(() => {
+                    captions = [];
+                });
+        }
+
         function onPlayerStateChange(event) {
-            if (event.data === YT.PlayerState.PLAYING) {
+            if (
+                event.data ===
+                YT.PlayerState.PLAYING
+            ) {
                 isPlaying = true;
-                document.getElementById("play-btn").innerText = "⏸";
                 updateLoop();
-                resetAutohide();
             } else {
                 isPlaying = false;
-                document.getElementById("play-btn").innerText = "▶";
                 cancelAnimationFrame(animFrame);
-                showControls();
             }
         }
+
         function updateLoop() {
-            if (!player || !isPlaying) return;
-            const current = player.getCurrentTime();
-            const sub = captions.find(s => current >= s.start && current <= s.end);
-            const subText = document.getElementById("sub-text");
+            if (
+                !player ||
+                !isPlaying
+            ) return;
+            const current =
+                player.getCurrentTime();
+            const sub =
+                captions.find(s =>
+                    current >= s.start &&
+                    current <= s.end
+                );
+            const subText =
+                document.getElementById("sub-text");
             if (sub) {
-                subText.innerText = sub.text;
-                subText.parentElement.style.opacity = 1;
+                subText.innerText =
+                    sub.text;
+                subText.parentElement
+                    .style.opacity = 1;
             } else {
                 subText.innerText = "";
-                subText.parentElement.style.opacity = 0;
+                subText.parentElement
+                    .style.opacity = 0;
             }
-            const duration = player.getDuration();
-            document.getElementById("progress-bar").style.width = (current / duration * 100) + "%";
-            animFrame = requestAnimationFrame(updateLoop);
+
+            animFrame =
+                requestAnimationFrame(updateLoop);
         }
-        function showControls() {
-            const bar = document.getElementById("ctrl-bar");
-            clearTimeout(hideTimeout);
-            bar.classList.remove("hide-controls");
-            if (isPlaying) {
-                hideTimeout = setTimeout(() => { bar.classList.add("hide-controls"); }, 3000);
-            }
-        }
-        function resetAutohide() { showControls(); }
-        document.getElementById("full-player").addEventListener("mousemove", resetAutohide);
-        document.getElementById("full-player").addEventListener("touchstart", resetAutohide);
-        document.getElementById("click-layer").onclick = () => {
-            if (isPlaying) player.pauseVideo(); else player.playVideo();
-        };
-        document.getElementById("play-btn").onclick = (e) => {
-            e.stopPropagation();
-            document.getElementById("click-layer").click();
-        };
-        document.getElementById("fs-btn").onclick = (e) => {
-            e.stopPropagation();
-            const box = document.getElementById("full-player");
-            if (!document.fullscreenElement) box.requestFullscreen();
-            else document.exitFullscreen();
-        };
-        document.getElementById("progress-container").onclick = function (e) {
-            e.stopPropagation();
-            const rect = this.getBoundingClientRect();
-            const pos = (e.clientX - rect.left) / rect.width;
-            player.seekTo(pos * player.getDuration());
-        };
+
         function timeToSec(str) {
             if (!str) return 0;
-            const parts = str.trim().replace(",", ".").split(":");
-            return parts.length === 3 ? (+parts[0]) * 3600 + (+parts[1]) * 60 + parseFloat(parts[2]) : (+parts[0]) * 60 + parseFloat(parts[1]);
+            const parts =
+                str.trim().replace(",", ".").split(":");
+            return parts.length === 3
+                ? (+parts[0]) * 3600 +
+                (+parts[1]) * 60 +
+                parseFloat(parts[2])
+                : (+parts[0]) * 60 +
+                parseFloat(parts[1]);
         }
+
         function parseVTT(data) {
             const result = [];
-            const clean = data.replace(/\r/g, "").split("\n\n");
+            const clean =
+                data.replace(/\r/g, "").split("\n\n");
             clean.forEach(sec => {
-                const lines = sec.split("\n");
-                let tLine = lines.find(l => l.includes("-->"));
+                const lines =
+                    sec.split("\n");
+                let tLine =
+                    lines.find(l =>
+                        l.includes("-->")
+                    );
                 if (tLine) {
-                    const ts = tLine.split("-->");
-                    const txt = lines.slice(lines.indexOf(tLine) + 1).join("\n").trim();
-                    result.push({ start: timeToSec(ts[0]), end: timeToSec(ts[1]), text: txt });
+                    const ts =
+                        tLine.split("-->");
+                    const txt =
+                        lines
+                            .slice(
+                                lines.indexOf(tLine) + 1
+                            )
+                            .join("\n")
+                            .trim();
+
+                    result.push({
+                        start:
+                            timeToSec(ts[0]),
+                        end:
+                            timeToSec(ts[1]),
+                        text: txt
+                    });
                 }
             });
+
             return result;
         }
+
+        document
+            .getElementById("custom-fs-btn")
+            .onclick = async () => {
+                const box =
+                    document.getElementById("full-player");
+                if (!document.fullscreenElement) {
+                    await box.requestFullscreen();
+                } else {
+                    await document.exitFullscreen();
+                }
+            };
     </script>
 </body>
 </html>
