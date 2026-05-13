@@ -67,5 +67,16 @@
                 "thumb": "https://img.youtube.com/vi/2K82JBTvPCg/hqdefault.jpg"
             }
         ]
+    },
+    {
+        "category": "SHOW",
+        "videos": [
+            {
+                "title": "[Vietsub] ILLIT (아일릿) | Leemujin Service EP.136 ILLIT MINJU",
+                "id": "5RcdLq6cFZ8",
+                "sub": "subs/5RcdLq6cFZ8.vtt",
+                "thumb": "https://img.youtube.com/vi/5RcdLq6cFZ8/hqdefault.jpg"
+            }
+        ]
     }
 ]

@@ -203,11 +203,11 @@
             right: 16px;
             bottom: 16px;
             z-index: 40;
-            width: 46px;
-            height: 46px;
+            width: 40px;
+            height: 40px;
             border: none;
             border-radius: 999px;
-            background: rgba(0, 0, 0, .72);
+            background: rgba(0, 0, 0, .1);
             color: white;
             font-size: 22px;
             cursor: pointer;
@@ -216,7 +216,7 @@
         }
 
         #custom-fs-btn:hover {
-            background: rgba(0, 0, 0, .9);
+            background: rgba(0, 0, 0, .1);
             transform: scale(1.05);
         }
 
@@ -416,6 +416,7 @@
         let isPlaying = false;
         let animFrame;
         let allData = [];
+        let currentVideoId = null;
 
         async function loadJson() {
             try {
@@ -508,6 +509,7 @@
             document
                 .getElementById("now-playing")
                 .innerText = video.title;
+            currentVideoId = video.id;
 
             if (!player) {
                 player = new YT.Player(
@@ -526,14 +528,19 @@
                         },
 
                         events: {
-                            onStateChange:
-                                onPlayerStateChange
+                            onStateChange: onPlayerStateChange,
+                            onReady: () => {
+                                restoreVideoTime(video.id);
+                            }
                         }
                     }
                 );
 
             } else {
                 player.loadVideoById(video.id);
+                setTimeout(() => {
+                    restoreVideoTime(video.id);
+                }, 1000);
             }
 
             fetch(video.sub)
@@ -587,6 +594,17 @@
 
             animFrame =
                 requestAnimationFrame(updateLoop);
+
+            const duration =
+                player.getDuration();
+            if (
+                duration &&
+                current >= duration - 10
+            ) {
+                localStorage.removeItem(
+                    "video-progress-" + currentVideoId
+                );
+            }
         }
 
         function timeToSec(str) {
@@ -636,6 +654,22 @@
             return result;
         }
 
+        function restoreVideoTime(videoId) {
+            if (!player) return;
+            const saved =
+                localStorage.getItem(
+                    "video-progress-" + videoId
+                );
+            if (!saved) return;
+            const time = parseFloat(saved);
+            if (
+                !isNaN(time) &&
+                time > 3
+            ) {
+                player.seekTo(time, true);
+            }
+        }
+
         document
             .getElementById("custom-fs-btn")
             .onclick = async () => {
@@ -657,6 +691,21 @@
                     await document.exitFullscreen();
                 }
             };
+
+        setInterval(() => {
+            if (
+                player &&
+                currentVideoId &&
+                typeof player.getCurrentTime === "function"
+            ) {
+                const current =
+                    player.getCurrentTime();
+                localStorage.setItem(
+                    "video-progress-" + currentVideoId,
+                    current
+                );
+            }
+        }, 3000);
     </script>
 </body>
 
