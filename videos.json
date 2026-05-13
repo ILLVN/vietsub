@@ -29,6 +29,23 @@
         ]
     },
     {
+        "category": "BEHIND-IT",
+        "videos": [
+            {
+                "title": "[Vietsub] ILLIT (아일릿) | ILLIT's Perfect Night x LE SSERAFIM",
+                "id": "1qfs77--B68",
+                "sub": "subs/1qfs77--B68.vtt",
+                "thumb": "https://img.youtube.com/vi/1qfs77--B68/hqdefault.jpg"
+            },
+            {
+                "title": "[Vietsub] ILLIT (아일릿) | Hậu trường quay phim thương hiệu Mini Album thứ 2 'I’LL LIKE YOU' [BEHIND-IT]",
+                "id": "kARxbUBKjmc",
+                "sub": "subs/kARxbUBKjmc.vtt",
+                "thumb": "https://img.youtube.com/vi/kARxbUBKjmc/hqdefault.jpg"
+            }
+        ]
+    },
+    {
         "category": "SUPER ILLIT",
         "videos": [
             {
