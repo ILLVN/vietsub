@@ -213,6 +213,15 @@
             cursor: pointer;
             backdrop-filter: blur(10px);
             transition: .2s;
+            opacity: 1;
+            transition:
+                opacity .3s,
+                transform .2s;
+        }
+
+        .hide-fs-btn {
+            opacity: 0;
+            pointer-events: none;
         }
 
         #custom-fs-btn:hover {
@@ -388,14 +397,11 @@
     </div>
     <div id="main-content">
         <div id="empty-state">
-            <div class="empty-icon">
-                ▶
-            </div>
             <div class="empty-title">
-                Chưa phát video nào
+                ◖|˶˘꒳˘˶|◗♪ᴵᵀˢ ᴹᴱ
             </div>
             <div class="empty-desc">
-                Chọn một video từ playlist để bắt đầu xem ◖|˶˘꒳˘˶|◗♪ᴵᵀˢ ᴹᴱ
+                Chọn một video từ playlist để bắt đầu xem
             </div>
         </div>
         <div class="player-box" id="full-player" style="display:none;">
@@ -423,6 +429,7 @@
                 const response = await fetch("videos.json");
                 allData = await response.json();
                 renderVideos(allData);
+                loadVideoFromHash();
             } catch (err) {
                 console.error("Không load được videos.json");
             }
@@ -445,17 +452,53 @@
                         document.createElement("div");
                     item.className =
                         "video-item";
+
+                    if (
+                        currentVideoId &&
+                        currentVideoId === video.id
+                    ) {
+                        item.classList.add("active");
+                    }
                     item.innerHTML = `
                         <img class="video-thumb" src="${video.thumb}" alt="">
                         <div class="video-content">
                             <div class="video-title">${video.title}</div>
                         </div>
                     `;
-                    item.onclick =
-                        () => loadVideo(video, item);
+                    item.onclick = () => {
+                        location.hash = video.id;
+                    };
                     list.appendChild(item);
                 });
             });
+        }
+
+        function loadVideoFromHash() {
+            const id =
+                location.hash
+                    .replace("#", "")
+                    .trim();
+            if (!id) return;
+            const items =
+                document.querySelectorAll(
+                    ".video-item"
+                );
+
+            let currentIndex = 0;
+
+            for (const group of allData) {
+                for (const video of group.videos) {
+                    if (video.id === id) {
+                        loadVideo(
+                            video,
+                            items[currentIndex]
+                        );
+
+                        return;
+                    }
+                    currentIndex++;
+                }
+            }
         }
 
         document
@@ -503,6 +546,7 @@
             document
                 .getElementById("full-player")
                 .style.display = "block";
+            initFsAutoHide();
             document
                 .getElementById("now-playing")
                 .style.display = "block";
@@ -560,10 +604,16 @@
                 YT.PlayerState.PLAYING
             ) {
                 isPlaying = true;
+                cancelAnimationFrame(animFrame);
                 updateLoop();
             } else {
                 isPlaying = false;
                 cancelAnimationFrame(animFrame);
+                document
+                    .getElementById("custom-fs-btn")
+                    .classList.remove(
+                        "hide-fs-btn"
+                    );
             }
         }
 
@@ -621,36 +671,37 @@
 
         function parseVTT(data) {
             const result = [];
-            const clean =
-                data.replace(/\r/g, "").split("\n\n");
-            clean.forEach(sec => {
-                const lines =
-                    sec.split("\n");
-                let tLine =
-                    lines.find(l =>
-                        l.includes("-->")
+            const blocks = data
+                .replace(/\r/g, "")
+                .split("\n\n");
+            blocks.forEach(block => {
+                const lines = block
+                    .split("\n")
+                    .map(v => v.trim())
+                    .filter(Boolean);
+                const timeLine =
+                    lines.find(line =>
+                        line.includes("-->")
                     );
-                if (tLine) {
-                    const ts =
-                        tLine.split("-->");
-                    const txt =
-                        lines
-                            .slice(
-                                lines.indexOf(tLine) + 1
-                            )
-                            .join("\n")
-                            .trim();
-
-                    result.push({
-                        start:
-                            timeToSec(ts[0]),
-                        end:
-                            timeToSec(ts[1]),
-                        text: txt
-                    });
-                }
+                if (!timeLine) return;
+                const times =
+                    timeLine.split("-->");
+                let text =
+                    lines
+                        .slice(lines.indexOf(timeLine) + 1)
+                        .join("\n")
+                        .trim();
+                text = text
+                    .replace(/<[^>]+>/g, "")
+                    .replace(/^•\s*/gm, "")
+                    .trim();
+                if (!text) return;
+                result.push({
+                    start: timeToSec(times[0]),
+                    end: timeToSec(times[1]),
+                    text: text
+                });
             });
-
             return result;
         }
 
@@ -706,6 +757,55 @@
                 );
             }
         }, 3000);
+
+        let fsHideTimeout;
+
+
+        function showFsButton() {
+            const btn =
+                document.getElementById(
+                    "custom-fs-btn"
+                );
+            clearTimeout(fsHideTimeout);
+            btn.classList.remove(
+                "hide-fs-btn"
+            );
+
+            fsHideTimeout =
+                setTimeout(() => {
+                    if (isPlaying) {
+                        btn.classList.add(
+                            "hide-fs-btn"
+                        );
+                    }
+                }, 2500);
+        }
+
+        function initFsAutoHide() {
+            const playerBox =
+                document.getElementById(
+                    "full-player"
+                );
+            [
+                "mousemove",
+                "touchstart",
+                "touchmove",
+                "click"
+            ]
+                .forEach(event => {
+                    playerBox.addEventListener(
+                        event,
+                        showFsButton,
+                        { passive: true }
+                    );
+                });
+            showFsButton();
+        }
+
+        window.addEventListener(
+            "hashchange",
+            loadVideoFromHash
+        );
     </script>
 </body>
 
