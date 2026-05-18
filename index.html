@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ILLIT Vietsub | ILLVN Subteam</title>
     <meta name="description"
-        content="Xem video ILLIT với phụ đề tiếng Việt, được cập nhật liên tục bởi subteam đầu hàng VN - ILLVN Subteam" />
+        content="Xem video ILLIT với phụ đề tiếng Việt, được cập nhật liên tục bởi ILLVN Subteam." />
     <link rel="icon" href="favicon.ico" />
 
     <style>
@@ -258,11 +258,10 @@
             position: absolute;
             left: 5%;
             right: 5%;
-            bottom: 30px;
+            bottom: 8%;
             text-align: center;
-            z-index: 20;
+            z-index: 2147483647;
             pointer-events: none;
-            transition: .3s;
         }
 
         #sub-text {
@@ -280,29 +279,24 @@
 
         #custom-fs-btn {
             position: absolute;
-            right: 16px;
-            bottom: 16px;
+            right: 13px;
+            bottom: 13px;
             z-index: 40;
             width: 40px;
             height: 40px;
             border: none;
             border-radius: 999px;
-            background: rgba(0, 0, 0, .1);
+            background: rgba(0, 0, 0, 0.2);
             color: white;
             font-size: 22px;
             cursor: pointer;
             backdrop-filter: blur(10px);
             opacity: 1;
-            transition: opacity .3s, transform .2s;
-        }
-
-        .hide-fs-btn {
-            opacity: 0;
-            pointer-events: none;
+            transition: transform .2s;
         }
 
         #custom-fs-btn:hover {
-            background: rgba(0, 0, 0, .1);
+            background: rgba(0, 0, 0, .4);
             transform: scale(1.05);
         }
 
@@ -633,7 +627,6 @@
 
             document.getElementById("empty-state").style.display = "none";
             document.getElementById("full-player").style.display = "block";
-            initFsAutoHide();
 
             const nowPlaying = document.getElementById("now-playing");
             nowPlaying.style.display = "block";
@@ -683,7 +676,6 @@
             } else {
                 isPlaying = false;
                 cancelAnimationFrame(animFrame);
-                document.getElementById("custom-fs-btn").classList.remove("hide-fs-btn");
             }
         }
 
@@ -692,15 +684,20 @@
             const current = player.getCurrentTime();
             const sub = captions.find(s => current >= s.start && current <= s.end);
             const subText = document.getElementById("sub-text");
+            const subContainer = document.getElementById("sub-container");
 
             if (sub) {
                 if (subText.innerText !== sub.text) {
                     subText.innerText = sub.text;
                 }
-                subText.parentElement.style.opacity = 1;
+                if (subContainer.style.display !== "block") {
+                    subContainer.style.display = "block";
+                }
             } else {
-                subText.innerText = "";
-                subText.parentElement.style.opacity = 0;
+                if (subContainer.style.display !== "none") {
+                    subText.innerText = "";
+                    subContainer.style.display = "none";
+                }
             }
 
             animFrame = requestAnimationFrame(updateLoop);
@@ -772,28 +769,6 @@
                 localStorage.setItem("video-progress-" + currentVideoId, current);
             }
         }, 3000);
-
-        let fsHideTimeout;
-
-        function showFsButton() {
-            const btn = document.getElementById("custom-fs-btn");
-            clearTimeout(fsHideTimeout);
-            btn.classList.remove("hide-fs-btn");
-
-            fsHideTimeout = setTimeout(() => {
-                if (isPlaying) {
-                    btn.classList.add("hide-fs-btn");
-                }
-            }, 2500);
-        }
-
-        function initFsAutoHide() {
-            const playerBox = document.getElementById("full-player");
-            ["mousemove", "touchstart", "touchmove", "click"].forEach(event => {
-                playerBox.addEventListener(event, showFsButton, { passive: true });
-            });
-            showFsButton();
-        }
 
         window.addEventListener("hashchange", loadVideoFromHash);
     </script>
